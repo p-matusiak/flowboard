@@ -1,0 +1,606 @@
+@import "tailwindcss";
+@import "@fontsource/ibm-plex-sans/latin-400.css";
+@import "@fontsource/ibm-plex-sans/latin-500.css";
+@import "@fontsource/ibm-plex-sans/latin-600.css";
+@import "@fontsource/ibm-plex-sans/latin-ext-400.css";
+@import "@fontsource/ibm-plex-sans/latin-ext-500.css";
+@import "@fontsource/ibm-plex-sans/latin-ext-600.css";
+@import "@fontsource/ibm-plex-mono/latin-400.css";
+@import "@fontsource/ibm-plex-mono/latin-500.css";
+@import "@fontsource/ibm-plex-mono/latin-ext-400.css";
+@import "@fontsource/ibm-plex-mono/latin-ext-500.css";
+
+@theme {
+  --font-sans: "IBM Plex Sans", "Segoe UI", sans-serif;
+  --font-mono: "IBM Plex Mono", ui-monospace, monospace;
+  --color-paper: #f4f5f7;
+  --color-canvas: #eef0f3;
+  --color-ink: #1b1e27;
+  --color-muted: #5c6370;
+  --color-subtle: #8b919c;
+  --color-line: #e4e6eb;
+  --color-line-strong: #d0d4dc;
+  --color-card: #ffffff;
+  --color-accent: #1d4ed8;
+  --color-danger: #b42318;
+  --color-ok: #0f7a4a;
+  --shadow-card: 0 1px 2px rgb(27 30 39 / 6%), 0 12px 32px rgb(27 30 39 / 6%);
+}
+
+@layer base {
+  button:not(:disabled),
+  [role="button"]:not(:disabled) {
+    cursor: pointer;
+  }
+
+  html,
+  body {
+    height: 100%;
+  }
+
+  body {
+    margin: 0;
+    background: var(--color-paper);
+    color: var(--color-ink);
+    font-family: var(--font-sans);
+    font-size: 15px;
+    line-height: 1.5;
+  }
+
+  :focus-visible {
+    outline: 2px solid color-mix(in oklab, var(--color-accent) 70%, white);
+    outline-offset: 2px;
+  }
+}
+
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  height: 40px;
+  padding: 0 14px;
+  border-radius: 10px;
+  border: 1px solid transparent;
+  background: transparent;
+  color: var(--color-ink);
+  font: inherit;
+  font-size: 14px;
+  font-weight: 500;
+  line-height: 1;
+  white-space: nowrap;
+}
+
+.btn:disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
+}
+
+.btn-primary {
+  background: var(--color-accent);
+  color: white;
+}
+
+.btn-primary:hover:not(:disabled) {
+  background: color-mix(in oklab, var(--color-accent) 86%, black);
+}
+
+.btn-secondary {
+  background: white;
+  border-color: var(--color-line-strong);
+}
+
+.btn-secondary:hover:not(:disabled) {
+  background: #f7f8fa;
+}
+
+.btn-ghost:hover:not(:disabled) {
+  background: #f1f2f4;
+}
+
+.btn-danger {
+  color: var(--color-danger);
+}
+
+.btn-sm {
+  height: 32px;
+  padding: 0 10px;
+  border-radius: 8px;
+  font-size: 13px;
+}
+
+.icon-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  border-radius: 10px;
+  border: 1px solid var(--color-line-strong);
+  background: white;
+  color: var(--color-ink);
+}
+
+.icon-btn:hover:not(:disabled) {
+  background: #f7f8fa;
+}
+
+.field {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.field span {
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--color-muted);
+}
+
+.field input,
+.text-input {
+  height: 44px;
+  width: 100%;
+  border-radius: 8px;
+  border: 1px solid var(--color-line-strong);
+  padding: 0 12px;
+  font: inherit;
+  font-size: 15px;
+  color: var(--color-ink);
+  background: white;
+}
+
+.surface {
+  background: white;
+  border: 1px solid var(--color-line);
+  border-radius: 24px;
+  box-shadow: var(--shadow-card);
+}
+
+.editor-mobile-note {
+  display: none;
+}
+
+@media (max-width: 1023px) {
+  .editor-desktop {
+    display: none;
+  }
+
+  .editor-mobile-note {
+    display: flex;
+  }
+}
+
+.board-shell {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  background: var(--color-canvas);
+}
+
+.board-toolbar {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  min-height: 56px;
+  padding: 8px 12px;
+  background: white;
+  border-bottom: 1px solid var(--color-line);
+  flex: none;
+  flex-wrap: wrap;
+}
+
+.board-canvas {
+  position: relative;
+  flex: 1;
+  min-height: 0;
+}
+
+.board-canvas.is-dragging {
+  outline: 2px solid color-mix(in oklab, var(--color-accent) 55%, white);
+  outline-offset: -2px;
+}
+
+.react-flow {
+  --xy-background-color: var(--color-canvas);
+  background: var(--color-canvas);
+}
+
+.react-flow__attribution {
+  background: transparent !important;
+  opacity: 0.55;
+}
+
+.board-empty {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  pointer-events: none;
+  z-index: 4;
+  padding: 24px;
+}
+
+.board-empty__card {
+  max-width: 420px;
+  text-align: center;
+  background: color-mix(in oklab, white 88%, transparent);
+  border: 1px solid var(--color-line);
+  border-radius: 20px;
+  padding: 24px;
+  box-shadow: var(--shadow-card);
+}
+
+.screen-card {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  height: 100%;
+  background: white;
+  border: 1px solid var(--color-line-strong);
+  border-radius: 16px;
+  box-shadow: var(--shadow-card);
+  position: relative;
+}
+
+.screen-card.is-selected {
+  border-color: var(--color-accent);
+  box-shadow:
+    0 0 0 3px color-mix(in oklab, var(--color-accent) 22%, transparent),
+    var(--shadow-card);
+}
+
+.screen-card__bar {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  padding: 10px 12px 8px;
+  border-bottom: 1px solid var(--color-line);
+  flex: none;
+}
+
+.screen-card__name,
+.screen-card__name-input {
+  font-size: 14px;
+  font-weight: 600;
+  line-height: 1.3;
+  color: var(--color-ink);
+  background: transparent;
+  border: 0;
+  text-align: left;
+  padding: 0;
+  width: 100%;
+}
+
+.screen-card__file {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  line-height: 1.3;
+  color: var(--color-subtle);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.screen-card__shot {
+  position: relative;
+  flex: 1;
+  min-height: 0;
+  background: #f7f8fa;
+  border-bottom-left-radius: 15px;
+  border-bottom-right-radius: 15px;
+  overflow: hidden;
+}
+
+.screen-card__shot img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  display: block;
+  pointer-events: none;
+  user-select: none;
+}
+
+.screen-card__status {
+  position: absolute;
+  left: 8px;
+  top: 8px;
+  border-radius: 999px;
+  background: white;
+  border: 1px solid var(--color-line);
+  padding: 2px 8px;
+  font-size: 11px;
+  font-weight: 500;
+  color: var(--color-muted);
+}
+
+.screen-card__status.is-error {
+  color: var(--color-danger);
+}
+
+.screen-card__status.is-ok {
+  color: var(--color-ok);
+}
+
+.screen-card .react-flow__handle.edge-anchor,
+.sticky-card .react-flow__handle.edge-anchor,
+.frame-card .react-flow__handle.edge-anchor {
+  border: 0;
+  border-radius: 0;
+  background: transparent;
+  opacity: 0;
+  min-width: 0;
+  min-height: 0;
+  z-index: 4;
+}
+
+.react-flow__handle-top.edge-anchor,
+.react-flow__handle-bottom.edge-anchor {
+  width: 100%;
+  height: 8px;
+  left: 0;
+  transform: none;
+}
+
+.react-flow__handle-top.edge-anchor {
+  top: 0;
+}
+
+.react-flow__handle-bottom.edge-anchor {
+  top: auto;
+  bottom: 0;
+}
+
+.react-flow__handle-left.edge-anchor,
+.react-flow__handle-right.edge-anchor {
+  width: 8px;
+  height: 100%;
+  top: 0;
+  transform: none;
+}
+
+.react-flow__handle-left.edge-anchor {
+  left: 0;
+}
+
+.react-flow__handle-right.edge-anchor {
+  left: auto;
+  right: 0;
+}
+
+.screen-card__tools {
+  position: absolute;
+  top: -44px;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  gap: 4px;
+  background: white;
+  border: 1px solid var(--color-line);
+  border-radius: 12px;
+  padding: 4px;
+  box-shadow: var(--shadow-card);
+  z-index: 5;
+}
+
+.react-flow__edgelabel-renderer {
+  z-index: 1001;
+}
+
+.flow-label {
+  position: absolute;
+  z-index: 2;
+  font-size: 12px;
+  line-height: 1.3;
+  background: white;
+  border: 1px solid var(--color-line-strong);
+  border-radius: 999px;
+  padding: 3px 8px;
+  color: var(--color-ink);
+  box-shadow: 0 1px 2px rgb(27 30 39 / 8%);
+  max-width: 220px;
+  pointer-events: all;
+}
+
+.flow-label.is-empty {
+  color: var(--color-subtle);
+}
+
+.flow-label button,
+.flow-label input {
+  font: inherit;
+  color: inherit;
+  background: transparent;
+  border: 0;
+  padding: 0;
+  max-width: 200px;
+}
+
+.flow-label button {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  display: block;
+}
+
+.flow-label input {
+  width: 180px;
+  outline: none;
+}
+
+.react-flow__resize-control.handle {
+  width: 12px;
+  height: 12px;
+  border-radius: 3px;
+  background: #1d4ed8;
+  border: 2px solid white;
+}
+
+.react-flow__resize-control.line {
+  border-color: #1d4ed8;
+}
+
+.sticky-card,
+.frame-card {
+  display: flex;
+  width: 100%;
+  height: 100%;
+  position: relative;
+  box-shadow: var(--shadow-card);
+}
+
+.sticky-card {
+  border-radius: 3px;
+  background: #f6e7a8;
+}
+
+.frame-card {
+  border-radius: 14px;
+  background: white;
+  border: 1px solid var(--color-line-strong);
+}
+
+.sticky-card.is-selected,
+.frame-card.is-selected {
+  box-shadow:
+    0 0 0 3px color-mix(in oklab, var(--color-accent) 22%, transparent),
+    var(--shadow-card);
+}
+
+.sticky-card textarea,
+.frame-card textarea {
+  width: 100%;
+  height: 100%;
+  min-height: 0;
+  resize: none;
+  border: 0;
+  background: transparent;
+  padding: 0;
+  font: inherit;
+  color: var(--color-ink);
+  outline: none;
+}
+
+.sticky-card textarea {
+  line-height: 1.2;
+  text-align: center;
+}
+
+.frame-card textarea {
+  font-size: 15px;
+  line-height: 1.45;
+  text-align: left;
+}
+
+.text-card__body {
+  flex: 1;
+  min-height: 0;
+  padding: 14px 16px;
+  overflow: hidden;
+}
+
+.text-card__body.is-note {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+}
+
+.text-card__body.is-frame {
+  overflow: auto;
+  font-size: 15px;
+  line-height: 1.45;
+  text-align: left;
+}
+
+.text-card__body p {
+  margin: 0;
+  width: 100%;
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+  word-break: break-word;
+  user-select: none;
+}
+
+.text-card__body.is-note p {
+  line-height: 1.2;
+  text-align: center;
+}
+
+.text-card__body.is-frame p {
+  line-height: 1.45;
+  text-align: left;
+}
+
+.text-card__body p.is-empty {
+  color: color-mix(in oklab, var(--color-ink) 45%, transparent);
+}
+
+.color-dots {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 0 4px;
+}
+
+.color-dot {
+  width: 16px;
+  height: 16px;
+  border-radius: 999px;
+  border: 2px solid white;
+  box-shadow: 0 0 0 1px var(--color-line-strong);
+  padding: 0;
+}
+
+.color-dot.is-on {
+  box-shadow: 0 0 0 2px var(--color-accent);
+}
+
+.zoom-cluster {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  margin-left: auto;
+}
+
+.save-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 13px;
+  color: var(--color-muted);
+  min-width: 108px;
+}
+
+.save-pill.is-ok {
+  color: var(--color-ok);
+}
+
+.save-pill.is-error {
+  color: var(--color-danger);
+}
+
+.project-name-btn {
+  font: inherit;
+  font-weight: 600;
+  font-size: 15px;
+  background: transparent;
+  border: 0;
+  padding: 4px 6px;
+  border-radius: 8px;
+  max-width: 280px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.project-name-btn:hover {
+  background: #f1f2f4;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  * {
+    animation: none !important;
+    transition: none !important;
+  }
+}
